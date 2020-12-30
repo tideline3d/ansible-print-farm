@@ -1,0 +1,11 @@
+- name: Provision Octoprint and mjpg_streamer on Raspberry Pi OS
+  hosts: test
+  remote_user: pi
+  become: true
+      
+  vars:
+    uninstall_services: trus
+    install_mjpg_streamer: false
+    octoprint_url: "https://github.com/OctoPrint/OctoPrint/archive/1.5.2.zip"
+  roles:
+  - semuadmin.octoprint
