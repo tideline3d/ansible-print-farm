@@ -1,4 +1,9 @@
 - hosts: all
+  tasks:
+    - name: Make sure timezone is set properly
+      community.general.timezone:
+        name: US/Eastern
+      become: true
   roles:
     - role: patrickjahns.promtail
       vars: 
