@@ -19,3 +19,10 @@
               labels:
                 job: varlogs
                 __path__: /var/log/*log
+          - job_name: octoprint
+            static_configs:
+            - targets:
+              - localhost
+              labels:
+                job: octoprint
+                __path__: /home/pi/.octoprint/logs/*.log 
