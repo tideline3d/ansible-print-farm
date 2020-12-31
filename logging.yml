@@ -29,5 +29,6 @@
             - targets:
               - localhost
               labels:
+                host: "{{ ansible_hostname }}"
                 job: octoprint
                 __path__: /home/pi/.octoprint/logs/*.log 
