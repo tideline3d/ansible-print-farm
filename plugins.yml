@@ -1,0 +1,6 @@
+- hosts: all
+  tasks: 
+    - name: Install pip dependencies
+      pip: 
+        virtualenv: /home/pi/oprint
+        name: git+https://github.com/jneilliii/OctoPrint-BedLevelVisualizer
