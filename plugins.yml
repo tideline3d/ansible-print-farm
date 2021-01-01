@@ -3,4 +3,6 @@
     - name: Install pip dependencies
       pip: 
         virtualenv: /home/pi/oprint
-        name: "git+https://github.com/jneilliii/OctoPrint-BedLevelVisualizer.git@0.1.15#egg=Bed-Visualizer"
+        name: 
+          - "git+https://github.com/jneilliii/OctoPrint-BedLevelVisualizer.git@0.1.15#egg=Bed-Visualizer"
+          - "git+https://github.com/tg44/OctoPrint-Prometheus-Exporter.git@0.1.6#egg=OctoPrint-Prometheus-Exporter"
