@@ -6,3 +6,9 @@
         name: 
           - "git+https://github.com/jneilliii/OctoPrint-BedLevelVisualizer.git@0.1.15#egg=Bed-Visualizer"
           - "git+https://github.com/tg44/OctoPrint-Prometheus-Exporter.git@0.1.6#egg=OctoPrint-Prometheus-Exporter"
+    - name: Restart OctoPrint after updating plugins  
+      ## Would be nice to have this check that a print isn't running before excuting
+      become: true
+      service:
+        name: octoprint
+        state: restarted
