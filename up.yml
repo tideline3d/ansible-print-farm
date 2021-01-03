@@ -20,3 +20,22 @@
   user: pi
   roles: 
     - semuadmin.octoprint
+
+- hosts: monitoring_server
+  user: pi
+  roles:
+    - role: cloudalchemy.grafana
+      vars:
+        grafana_security:
+          admin_user: admin
+          admin_password: admin
+        grafana_datasources:
+          - name: prometheus
+            type: prometheus
+            url: "http://{{ hostvars[inventory_hostname]['ansible_facts']['eth0']['ipv4']['address'] }}:9090"
+            basicAuth: false
+        grafana_dashboards:
+          - dashboard_id: 1860    #Node Exporter Full Dashboard
+            revision_id: 21
+            datasource: prometheus
+            api_key: eyJrIjoiYjVmZThmMzg3MGJhZDY1ZjMxYmE3MDIzZmIwY2UwNTg5M2M0OTRlMyIsIm4iOiJBbnNpYmxlIiwiaWQiOjQ1MjAzNH0=
