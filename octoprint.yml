@@ -1,8 +1,0 @@
-- name: Provision Octoprint and mjpg_streamer on Raspberry Pi OS
-  hosts: test
-  remote_user: pi
-  become: true
-      
-
-  roles:
-  - semuadmin.octoprint
