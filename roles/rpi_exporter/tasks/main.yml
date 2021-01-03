@@ -7,13 +7,14 @@
   become: yes
   user:
     name: "{{userId}}"
-    group: "{{groupId}}"
+    groups: 
+      - "{{groupId}}"
+      - video
     system: yes
     shell: "/sbin/nologin"
     comment: "{{userId}} nologin User"
     createhome: "no"
     state: present
-
 
 - name: Install RPi Exporter
   unarchive:
