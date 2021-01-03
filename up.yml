@@ -1,0 +1,12 @@
+---
+- hosts: all
+  user: pi
+  roles:
+    - common
+    - rpi_exporter
+    - node_exporter
+
+- hosts: tpi1 
+  user: pi
+  roles:
+    - monitoring_server 
