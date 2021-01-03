@@ -3,5 +3,7 @@ roles:
     version: 1.0.2
   - name: patrickjahns.promtail
     version: 1.9.1
-    
+  - name: cloudalchemy.grafana
+    version: 0.17.0
+
 collections:

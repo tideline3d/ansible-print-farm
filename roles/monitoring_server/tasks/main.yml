@@ -104,22 +104,3 @@
     url: http://localhost:9090
     method: GET
     status_code: 200
-
-- name: 'Download Grafana'
-  get_url:
-    url: 'https://dl.grafana.com/oss/release/grafana_{{ grafanaVersion }}_armhf.deb'
-    dest: /tmp/
-
-- name: 'Install Grafana'
-  become: yes
-  apt:
-    deb: '/tmp/grafana_{{ grafanaVersion }}_armhf.deb'
-
-- name: Start Grafana service
-  become: yes
-  become_user: root
-  become_method: sudo
-  service:
-    name: grafana-server
-    state: started
-    enabled: yes
