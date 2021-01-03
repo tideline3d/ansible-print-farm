@@ -1,0 +1,7 @@
+roles:
+  - name: semuadmin.octoprint
+    version: 1.0.2
+  - name: patrickjahns.promtail
+    version: 1.9.1
+    
+collections:

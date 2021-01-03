@@ -1,0 +1,32 @@
+galaxy_info:
+  role_name: octoprint
+  author: semu
+  description: Octoprint & mjpg_streamer on Raspberry Pi OS
+  company: SEMU Consulting
+
+  license: BSD
+
+  min_ansible_version: 2.5
+
+  platforms:
+    - name: Debian
+      versions:
+        - buster
+        - stretch
+    - name: Ubuntu
+      versions:
+        - bionic
+        - disco
+        - eoan
+        - focal
+
+  galaxy_tags:
+  - octoprint
+  - octopi
+  - raspbian
+  - raspberry
+  - rpi
+  - raspberrypi
+  - mjpgstreamer
+
+  dependencies:
