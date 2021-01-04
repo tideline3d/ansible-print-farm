@@ -1,2 +1,7 @@
 ---
 # handlers file for octoprint_plugins
+  - name: Restart OctoPrint        ## Would be nice to have this check that a print isn't running before excuting
+    become: true
+    ansible.builtin.service:
+      name: octoprint
+      state: restarted
