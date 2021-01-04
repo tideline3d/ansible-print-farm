@@ -41,4 +41,3 @@
           - dashboard_id: 1860    #Node Exporter Full Dashboard
             revision_id: 21
             datasource: prometheus
-            api_key: "'{{ lookup('env', 'GRAFANA_API_KEY') }}'"
