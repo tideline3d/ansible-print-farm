@@ -1,4 +1,4 @@
----
+## Common Setups for all hosts
 - hosts: all
   user: pi
   roles:
@@ -6,11 +6,13 @@
     - rpi_exporter
     - node_exporter
 
+## Monitoring Server
 - hosts: tpi1 
   user: pi
   roles:
     - monitoring_server 
 
+## Octoprint Hosts
 - hosts: tpi1 
   vars: 
     - install_mjpg_streamer: false
@@ -20,6 +22,7 @@
   user: pi
   roles: 
     - semuadmin.octoprint
+    - octoprint_plugins
 
 - hosts: monitoring_server
   user: pi
