@@ -14,7 +14,7 @@
 - hosts: tpi1 
   vars: 
     - install_mjpg_streamer: false
-    - reset_config: true
+    - reset_config: false
     - octoprint_url: "https://github.com/OctoPrint/OctoPrint/archive/1.5.2.zip"
   become: yes
   user: pi
