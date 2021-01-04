@@ -1,10 +1,10 @@
 - hosts: all
+  remote_user: pi
   tasks: 
     - name: Install pip dependencies
       pip: 
-        virtualenv: /home/pi/oprint
+        virtualenv: /home/pi/Octoprint/venv/
         name: 
-          - "git+https://github.com/jneilliii/OctoPrint-BedLevelVisualizer.git@1.0.0#egg=Bed-Visualizer"
           - "git+https://github.com/tg44/OctoPrint-Prometheus-Exporter.git@0.1.6#egg=OctoPrint-Prometheus-Exporter"
       notify:
         - Restart OctoPrint
