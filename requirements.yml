@@ -5,5 +5,7 @@ roles:
     version: 1.9.1
   - name: cloudalchemy.grafana
     version: 0.17.0
+  - name: cloudalchemy.prometheus
+    version: 2.16.2
 
 collections:

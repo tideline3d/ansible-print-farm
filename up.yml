@@ -2,31 +2,45 @@
 - hosts: all
   user: pi
   roles:
-    - common
-    - rpi_exporter
-    - node_exporter
-
-## Monitoring Server
-- hosts: tpi1 
-  user: pi
-  roles:
-    - monitoring_server 
+   - common
+   - rpi_exporter
+   - node_exporter
 
 ## Octoprint Hosts
 - hosts: tpi1 
   vars: 
     - install_mjpg_streamer: false
-    - reset_config: true
+    - reset_config: false
     - octoprint_url: "https://github.com/OctoPrint/OctoPrint/archive/1.5.2.zip"
   become: yes
   user: pi
   roles: 
-    - semuadmin.octoprint
-    - octoprint_plugins
+   - semuadmin.octoprint
+   - octoprint_plugins
 
 - hosts: monitoring_server
   user: pi
   roles:
+    - role: cloudalchemy.prometheus
+      vars:
+        prometheus_scrape_configs:
+          - job_name: "prometheus"
+            metrics_path: "/metrics"
+            static_configs:
+            - targets:
+              - "{{ ansible_host }}:9090"
+          - job_name: "system"
+            metrics_path: "/metrics"
+            static_configs:
+            - targets:
+              - "{{ ansible_host }}:9100"
+          - job_name: "octoprint"
+            metrics_path: "/plugin/prometheus_exporter/metrics"
+            params:
+              apikey: ['2F5AB5B30C22485FA75F87A8421C1D3A']
+            static_configs:
+            - targets:
+              - "{{ ansible_host }}:5000"
     - role: cloudalchemy.grafana
       vars:
         grafana_security:
