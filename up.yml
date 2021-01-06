@@ -93,9 +93,35 @@
             revision_id: 21
             datasource: prometheus
 
-# - hosts: octofarm_server
-#   user: pi
-#   vars_files:
-#     - vars/octofarm.yml
-#   roles:
-#     - geerlingguy.nodejs
+- hosts: octofarm_server
+  user: pi
+  tasks:
+  - name: Install a list of packages
+    become: yes
+    apt:
+      update_cache: yes
+      pkg:
+      - nodejs
+      - gcc 
+      - g++
+      - make
+      - mongodb
+  - name: Git checkout
+    git:
+      repo: 'https://github.com/NotExpectedYet/OctoFarm.git'
+      dest: /home/pi/OctoFarm
+  - name: Install pm2
+    args:
+      chdir: /home/pi/OctoFarm/
+    command: npm install pm2 -g
+    become: yes
+  - name: Generate pm2 startupls
+    command: pm2 startup
+    args:
+      chdir: /home/pi/OctoFarm/
+    become: yes
+  - name: Save pm2 setup
+    command: pm2 save
+    args:
+      chdir: /home/pi/OctoFarm/
+    become: yes
