@@ -92,3 +92,10 @@
           - dashboard_id: 1860    #Node Exporter Full Dashboard
             revision_id: 21
             datasource: prometheus
+
+# - hosts: octofarm_server
+#   user: pi
+#   vars_files:
+#     - vars/octofarm.yml
+#   roles:
+#     - geerlingguy.nodejs

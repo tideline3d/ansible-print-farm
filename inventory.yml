@@ -21,6 +21,9 @@ all:
     monitoring_server:
       hosts:
         tpi1: {}
+    octofarm_server:
+      hosts:
+        tpi1: {}
 
   vars:
     ansible_python_interpreter: /usr/bin/python3
