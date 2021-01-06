@@ -6,6 +6,39 @@
    - rpi_exporter
    - node_exporter
 
+## Log all hosts syslog to Loki
+- hosts: all
+  become: yes
+  user: pi
+  roles:
+    - role: patrickjahns.promtail
+      vars: 
+        promtail_config_include_default_file_sd_config: False
+        promtail_config_clients:
+          - url: "http://192.168.42.242:3100/loki/api/v1/push"
+            external_labels:
+              host: "{{ ansible_hostname }}"
+        promtail_config_positions:
+          filename: "{{ promtail_positions_directory }}/positions.yaml"
+          sync_period: "60s"
+
+        promtail_config_scrape_configs:
+          - job_name: system
+            static_configs:
+            - targets:
+                - localhost
+              labels:
+                job: varlogs
+                __path__: /var/log/*log
+          - job_name: octoprint
+            static_configs:
+            - targets:
+              - localhost
+              labels:
+                host: "{{ ansible_hostname }}"
+                job: octoprint
+                __path__: /home/pi/.octoprint/logs/*.log 
+
 ## Octoprint Hosts
 - hosts: tpi1 
   vars: 
@@ -33,13 +66,13 @@
             metrics_path: "/metrics"
             static_configs:
             - targets:
-              - "{{ ansible_host }}:9100"
-          - job_name: "octoprint"
+              - "{{ ansible_host }}:9100"  ## This needs to be a list of all hosts, not just the current one
+          - job_name: "octoprint"   #This needs to be a loop of all printers
             metrics_path: "/plugin/prometheus_exporter/metrics"
             params:
-              apikey: ['2F5AB5B30C22485FA75F87A8421C1D3A']
+              apikey: ['2F5AB5B30C22485FA75F87A8421C1D3A']  #Do we use a static API key for now, or try to pull the generated ones?
             static_configs:
-            - targets:
+            - targets:  #This needs to be a loop of all printers
               - "{{ ansible_host }}:5000"
     - role: cloudalchemy.grafana
       vars:
