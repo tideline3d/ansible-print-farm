@@ -37,7 +37,7 @@
               labels:
                 host: "{{ ansible_hostname }}"
                 job: octoprint
-                __path__: /home/pi/.octoprint/logs/*.log 
+                __path__: /home/pi/.octoprint/logs/*.log
 
 ## Octoprint Hosts
 - hosts: tpi1 
@@ -73,6 +73,10 @@
               apikey: ['2F5AB5B30C22485FA75F87A8421C1D3A']  #Do we use a static API key for now, or try to pull the generated ones?
             static_configs:
             - targets:  #This needs to be a loop of all printers
+
+              apikey: ['2F5AB5B30C22485FA75F87A8421C1D3A']
+            static_configs:
+            - targets:
               - "{{ ansible_host }}:5000"
     - role: cloudalchemy.grafana
       vars:
