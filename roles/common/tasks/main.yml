@@ -46,7 +46,7 @@
     dest: '~{{ ansible_user_id }}/.zshrc'
     backup: yes
     mode: 'u=rw,go=r'
-- name: Make sure timezone is set properly
+- name: Set Timezone
   community.general.timezone:
     name: US/Eastern
   become: true
