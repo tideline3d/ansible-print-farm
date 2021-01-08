@@ -3,12 +3,16 @@ all:
   hosts:
     tpi1:   
       ansible_host: 10.1.2.101
+      ansible_user: pi
     tpi2:   
       ansible_host: 10.1.2.102
+      ansible_user: ubuntu
     tpi3:   
       ansible_host: 10.1.2.103
+      ansible_user: pi
     tpi4:   
       ansible_host: 10.1.2.104
+      ansible_user: pi
     
   children:
     raspberry_pi:  #All hosts on RPi hardware
@@ -31,4 +35,4 @@ all:
 
   vars:
     ansible_python_interpreter: /usr/bin/python3
-    remote_user: pi
+    #remote_user: pi
