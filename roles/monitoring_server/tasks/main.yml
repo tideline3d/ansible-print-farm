@@ -82,6 +82,7 @@
   template:
     src: prometheus.conf.j2
     dest: /etc/prometheus/prometheus.conf
+  notify: event_restart_prometheus
 
 - name: Copy systemd init file
   become: yes

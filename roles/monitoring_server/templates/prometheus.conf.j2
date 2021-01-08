@@ -28,18 +28,17 @@ scrape_configs:
     static_configs:
     - targets: ['localhost:9090']
 
-{% for host in groups['raspberry_pi'] %}
-{% set ip_address = hostvars[host]['ansible_facts']['eth0']['ipv4']['address'] %}
 
-  - job_name: '{{ host }}'
+  - job_name: 'System'
 
     # metrics_path defaults to '/metrics'
     # scheme defaults to 'http'.
 
     static_configs:
     - targets:
+{% for host in groups['all'] %}
+{% set ip_address = hostvars[host]['ansible_host'] %}
       - '{{ ip_address }}:9243'
       - '{{ ip_address }}:9100'
-
 {% endfor %}
 
