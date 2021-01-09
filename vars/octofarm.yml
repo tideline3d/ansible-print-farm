@@ -1,0 +1,10 @@
+nodejs_version: "12.x"
+
+nodejs_npm_global_packages:
+  # Install a specific version of a package.
+  - name: jslint
+    version: 0.9.3
+  # Install the latest stable release of a package.
+  - name: node-sass
+  # This shorthand syntax also works (same as previous example).
+  - node-sass

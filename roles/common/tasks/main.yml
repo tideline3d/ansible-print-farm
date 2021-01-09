@@ -2,18 +2,16 @@
 - name: 'Update and upgrade apt packages'
   become: yes
   apt:
-    upgrade: yes
+    upgrade: "yes"
     update_cache: yes
     cache_valid_time: 86400
-- name: 'Install packages'
+- name: 'Install common packages'
   become: yes
   apt:
     pkg:
       - python3-pip
       - git
-      - vim
       - zsh
-      - tmux
 - pip:
     name: glances
     executable: pip3
@@ -46,7 +44,7 @@
     dest: '~{{ ansible_user_id }}/.zshrc'
     backup: yes
     mode: 'u=rw,go=r'
-- name: Make sure timezone is set properly
+- name: Set Timezone
   community.general.timezone:
     name: US/Eastern
   become: true
