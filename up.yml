@@ -51,26 +51,6 @@
 - hosts: monitoring_server
   roles:
     - role: monitoring_server
-    # - role: cloudalchemy.prometheus
-    #   vars:
-    #     prometheus_scrape_configs:
-    #       - job_name: "prometheus"
-    #         metrics_path: "/metrics"
-    #         static_configs:
-    #         - targets:
-    #           - "{{ ansible_host }}:9090"
-    #       - job_name: "system"
-    #         metrics_path: "/metrics"
-    #         static_configs:
-    #         - targets:
-    #           - "{{ ansible_host }}:9100"  ## This needs to be a list of all hosts, not just the current one
-    #       - job_name: "octoprint"   #This needs to be a loop of all printers
-    #         metrics_path: "/plugin/prometheus_exporter/metrics"
-    #         params:
-    #           apikey: ['2F5AB5B30C22485FA75F87A8421C1D3A']  #Do we use a static API key for now, or try to pull the generated ones?
-    #         static_configs:
-    #         - targets:  #This needs to be a loop of all printers
-              # - "{{ ansible_host }}:5000"
     - role: cloudalchemy.grafana
       vars:
         grafana_security:
