@@ -1,15 +1,13 @@
 ## Common Setups for all hosts
 - hosts: all
-  user: pi
   roles:
-   - common
-   - rpi_exporter
    - node_exporter
+   - common
+   - rpi_exporter   
 
 ## Log all hosts syslog to Loki
 - hosts: all
   become: yes
-  user: pi
   roles:
     - role: patrickjahns.promtail
       vars: 
@@ -46,13 +44,11 @@
     - reset_config: false
     - octoprint_url: "https://github.com/OctoPrint/OctoPrint/archive/1.5.2.zip"
   become: yes
-  user: pi
   roles: 
    - semuadmin.octoprint
    - octoprint_plugins
 
 - hosts: monitoring_server
-  user: pi
   roles:
     - role: monitoring_server
     # - role: cloudalchemy.prometheus
@@ -91,37 +87,68 @@
             datasource: prometheus
 
 - hosts: octofarm_server
-  user: pi
   tasks:
-  - name: Install a list of packages
+  - name: Add an Apt signing key for MongoDB 4.2
+    apt_key:
+      url: https://www.mongodb.org/static/pgp/server-4.2.asc 
+      state: present
+    become: yes
+  - name: Add MongoDB 4.2 repository into sources list
+    apt_repository:
+      repo: deb [ arch=arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse
+      state: present
+    become: yes
+  - name: Add an Apt signing key for Node 12
+    apt_key:
+      url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+      state: present
+    become: yes
+  - name: Add Node 12 repository into sources list
+    apt_repository:
+      repo: deb https://deb.nodesource.com/node_12.x buster main
+      state: present
+    become: yes
+    
+  - name: Install Octofarm apt dependencies
     become: yes
     apt:
       update_cache: yes
       pkg:
       - nodejs
-      - npm
+      #- npm
       - gcc 
       - g++
       - make
-     # - mongodb
+      - mongodb-org
   - name: Git checkout
     git:
       repo: 'https://github.com/NotExpectedYet/OctoFarm.git'
-      dest: /home/pi/OctoFarm
-  - name: Install Node Modules
+      dest: ~/OctoFarm
+      depth: 1
+      force: yes  # Does this break things?  We shall see
+  - name: Start MongoDB
+    become: yes
+    systemd:
+     state: restarted
+     daemon_reload: yes
+     enabled: yes
+     name: mongod
+  - name: Start OctoFarm
     args:
-      chdir: /home/pi/OctoFarm/
-    command: npm install
+      chdir: ~/OctoFarm/
+    command: npm start
   - name: Install pm2
-    args:
-      chdir: /home/pi/OctoFarm/
     command: npm install pm2 -g
     become: yes
-  - name: Generate pm2 startupls
-    command: pm2 startup
+  - name: Generate pm2 startup scripts
+    command: pm2 startup  #Run this once to get past their stupid splash screen, ignore it, then run it for real next time
+    ignore_errors: yes
+    #become: yes
+  - name: Generate pm2 startup scripts
+    command: "pm2 startup | sed -n 3p | bash" #Get the 3rd line of output from startup command and run it as sudo
     args:
-      chdir: /home/pi/OctoFarm/
+      chdir: ~/OctoFarm/
   - name: Save pm2 setup
     command: pm2 save
     args:
-      chdir: /home/pi/OctoFarm/
+      chdir: ~/OctoFarm/

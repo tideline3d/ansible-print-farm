@@ -6,7 +6,7 @@ all:
       ansible_user: pi
     tpi2:   
       ansible_host: 10.1.2.102
-      ansible_user: ubuntu
+      ansible_user: pi
     tpi3:   
       ansible_host: 10.1.2.103
       ansible_user: pi
@@ -35,4 +35,3 @@ all:
 
   vars:
     ansible_python_interpreter: /usr/bin/python3
-    #remote_user: pi
