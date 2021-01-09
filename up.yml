@@ -136,19 +136,19 @@
   - name: Start OctoFarm
     args:
       chdir: ~/OctoFarm/
-    command: npm start
+    shell: pm2 stop OctoFarm ; npm start
   - name: Install pm2
-    command: npm install pm2 -g
+    shell: npm install pm2 -g
     become: yes
   - name: Generate pm2 startup scripts
-    command: pm2 startup  #Run this once to get past their stupid splash screen, ignore it, then run it for real next time
+    shell: pm2 startup  #Run this once to get past their stupid splash screen, ignore it, then run it for real next time
     ignore_errors: yes
     #become: yes
   - name: Generate pm2 startup scripts
-    command: "pm2 startup | sed -n 3p | bash" #Get the 3rd line of output from startup command and run it as sudo
+    shell: pm2 startup | sed -n 3p | bash #Get the 3rd line of output from startup command and run it as sudo
     args:
       chdir: ~/OctoFarm/
   - name: Save pm2 setup
-    command: pm2 save
+    shell: pm2 save
     args:
       chdir: ~/OctoFarm/
