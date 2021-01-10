@@ -1,0 +1,23 @@
+---
+galaxy_info:
+  author: Paul Kremer
+  role_name: rpi_boot_config
+  description: Configure raspberry pi /boot/config.txt
+  company: Snakeoil
+
+  license: BSD
+
+  min_ansible_version: 2.7
+
+  platforms:
+    - name: Debian
+      versions:
+        - buster
+        - jessie
+        - stretch
+
+  galaxy_tags:
+    - raspberrypi
+    - raspbian
+
+dependencies: []

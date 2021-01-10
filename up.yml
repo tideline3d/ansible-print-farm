@@ -4,6 +4,12 @@
    - common
    - node_exporter
 
+- hosts: raspberry_pi
+  roles:
+    - role: rpi_boot_config
+      # Raise PoE Hat fan temp threshold
+      boot_config_lines: ['dtparam=poe_fan_temp0=65000,poe_fan_temp0_hyst=5000', 'dtparam=poe_fan_temp1=67000,poe_fan_temp1_hyst=2000']
+
 - hosts: monitoring_server
   roles:
     - role: monitoring_server
