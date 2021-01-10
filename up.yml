@@ -1,15 +1,23 @@
-## Common Setups for all hosts
+
+## Configure RPi specific items
+- hosts: raspberry_pi
+  roles:
+    - role: rpi_boot_config  # This will reboot the RPi if changes are made and wait for it to come back up
+      become: yes
+      vars:
+        boot_config_lines:
+        - "dtparam=poe_fan_temp0=65000,poe_fan_temp0_hyst=5000"  # Set PoE Hat Fan to come on at 65C instead of 45C
+        - "dtparam=poe_fan_temp1=67000,poe_fan_temp1_hyst=2000"  # Speed up fan after 67C
+        - "dtparam=poe_fan_temp2=69000,poe_fan_temp2_hyst=5000"
+        - "dtparam=poe_fan_temp3=71000,poe_fan_temp3_hyst=2000"
+
+## Common items for all systems
 - hosts: all
   roles:
    - common
    - node_exporter
 
-- hosts: raspberry_pi
-  roles:
-    - role: rpi_boot_config
-      # Raise PoE Hat fan temp threshold
-      boot_config_lines: ['dtparam=poe_fan_temp0=65000,poe_fan_temp0_hyst=5000', 'dtparam=poe_fan_temp1=67000,poe_fan_temp1_hyst=2000']
-
+## Deploy the monitoring server configuration
 - hosts: monitoring_server
   roles:
     - role: monitoring_server
