@@ -65,6 +65,8 @@
           - dashboard_id: 1860    #Node Exporter Full Dashboard
             revision_id: 21
             datasource: prometheus
+    - role: softasap.sa_loki
+      become: yes
 
 - hosts: octofarm_server
   tasks:
