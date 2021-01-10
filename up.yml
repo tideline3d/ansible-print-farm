@@ -1,8 +1,8 @@
 ## Common Setups for all hosts
 - hosts: all
   roles:
-   - node_exporter
    - common
+   - node_exporter
    - rpi_exporter   
 
 ## Log all hosts syslog to Loki
@@ -13,7 +13,7 @@
       vars: 
         promtail_config_include_default_file_sd_config: False
         promtail_config_clients:
-          - url: "http://10.1.2.101:3100/loki/api/v1/push"
+          - url: "http://{{ hostvars['tpi2'].ansible_host }}:3100/loki/api/v1/push"
             external_labels:
               host: "{{ ansible_hostname }}"
         promtail_config_positions:
@@ -59,7 +59,7 @@
         grafana_datasources:
           - name: prometheus
             type: prometheus
-            url: "http://{{ hostvars[inventory_hostname]['ansible_facts']['eth0']['ipv4']['address'] }}:9090"
+            url: "http://{{ hostvars['tpi2'].ansible_host }}:9090"
             basicAuth: false
         grafana_dashboards:
           - dashboard_id: 1860    #Node Exporter Full Dashboard
