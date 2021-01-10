@@ -1,0 +1,24 @@
+---
+- name: configure loki
+  template:
+    src: "loki.yml.j2"
+    dest: "{{ loki_config_dir }}/loki.yml"
+    force: true
+    owner: root
+    group: "{{ loki_user }}"
+    mode: 0640
+  notify:
+    - reload loki
+  when: ('loki' in loki_bins)
+
+- name: configure promtail
+  template:
+    src: "promtail.yml.j2"
+    dest: "{{ loki_config_dir }}/promtail.yml"
+    force: true
+    owner: root
+    group: "{{ loki_user }}"
+    mode: 0640
+  notify:
+    - reload promtail
+  when: ('promtail' in loki_bins)

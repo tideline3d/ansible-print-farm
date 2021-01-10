@@ -73,6 +73,7 @@
 - name: Display IP address
   debug:
     var: hostvars[inventory_hostname]['ansible_facts']['eth0']['ipv4']['address']
+
 - name: Display host
   debug:
     var: inventory_hostname

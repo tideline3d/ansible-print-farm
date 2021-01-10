@@ -1,0 +1,23 @@
+#jinja2: trim_blocks: True, lstrip_blocks: True
+{{ ansible_managed | comment }}
+
+{% if promtail_server_config != [] %}
+server:
+  {{ promtail_server_config | to_nice_yaml(indent=2) | indent(2, False) }}
+{% endif %}
+{% if promtail_positions_config != [] %}
+positions:
+  {{ promtail_positions_config | to_nice_yaml(indent=2) | indent(2, False) }}
+{% endif %}
+{% if promtail_client_config != [] %}
+clients:
+  {{ promtail_client_config | to_nice_yaml(indent=2) | indent(2, False) }}
+{% endif %}
+{% if promtail_scrape_config != [] %}
+scrape_configs:
+  {{ promtail_scrape_config | to_nice_yaml(indent=2) | indent(2, False) }}
+{% endif %}
+{% if promtail_target_config != [] %}
+target_config:
+  {{ promtail_target_config | to_nice_yaml(indent=2) | indent(2, False) }}
+{% endif %}

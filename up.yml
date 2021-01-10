@@ -13,7 +13,7 @@
       vars: 
         promtail_config_include_default_file_sd_config: False
         promtail_config_clients:
-          - url: "http://192.168.42.242:3100/loki/api/v1/push"
+          - url: "http://10.1.2.101:3100/loki/api/v1/push"
             external_labels:
               host: "{{ ansible_hostname }}"
         promtail_config_positions:
@@ -65,8 +65,8 @@
           - dashboard_id: 1860    #Node Exporter Full Dashboard
             revision_id: 21
             datasource: prometheus
-    - role: softasap.sa_loki
-      become: yes
+    - role: diogenxs.loki
+      loki_bins: ['loki']
 
 - hosts: octofarm_server
   tasks:

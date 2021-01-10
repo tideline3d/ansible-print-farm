@@ -1,0 +1,14 @@
+---
+- include: preflight.yml
+  tags:
+    - loki_pre_install
+
+- include: install.yml
+  become: true
+  tags:
+    - loki_configure
+
+- include: configure.yml
+  become: true
+  tags:
+    - loki_configure
