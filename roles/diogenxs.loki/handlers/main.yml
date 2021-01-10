@@ -5,6 +5,7 @@
     daemon_reload: true
     name: loki
     state: restarted
+    enabled: yes
   when: ('loki' in loki_bins)
 
 - name: reload loki
