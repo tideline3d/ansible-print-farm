@@ -3,7 +3,6 @@
   roles:
    - common
    - node_exporter
-   - rpi_exporter   
 
 ## Log all hosts syslog to Loki
 - hosts: all
