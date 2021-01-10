@@ -4,6 +4,30 @@
    - common
    - node_exporter
 
+- hosts: monitoring_server
+  roles:
+    - role: monitoring_server
+    - role: cloudalchemy.grafana
+      vars:
+        grafana_security:
+          admin_user: admin
+          admin_password: admin
+        grafana_datasources:
+          - name: Prometheus
+            type: prometheus
+            url: "http://127.0.0.1:9090"
+            basicAuth: false
+          - name: Loki
+            type: loki
+            url: "http://127.0.0.1:3100"
+            basicAuth: false
+        grafana_dashboards:
+          - dashboard_id: 1860    #Node Exporter Full Dashboard
+            revision_id: 21
+            datasource: Prometheus
+    - role: diogenxs.loki
+      loki_bins: ['loki']
+
 ## Log all hosts syslog to Loki
 - hosts: all
   become: yes
@@ -49,30 +73,6 @@
   roles: 
    - semuadmin.octoprint
    - octoprint_plugins
-
-- hosts: monitoring_server
-  roles:
-    - role: monitoring_server
-    - role: cloudalchemy.grafana
-      vars:
-        grafana_security:
-          admin_user: admin
-          admin_password: admin
-        grafana_datasources:
-          - name: Prometheus
-            type: prometheus
-            url: "http://127.0.0.1:9090"
-            basicAuth: false
-          - name: Loki
-            type: loki
-            url: "http://127.0.0.1:3100"
-            basicAuth: false
-        grafana_dashboards:
-          - dashboard_id: 1860    #Node Exporter Full Dashboard
-            revision_id: 21
-            datasource: Prometheus
-    - role: diogenxs.loki
-      loki_bins: ['loki']
 
 - hosts: octofarm_server
   tasks:
