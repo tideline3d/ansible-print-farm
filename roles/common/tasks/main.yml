@@ -1,4 +1,8 @@
 ---
+- name: inventory name to hostname
+  become: yes
+  hostname:
+    name: "{{ inventory_name }}"
 - name: 'Update and upgrade apt packages'
   become: yes
   apt:
