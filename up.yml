@@ -35,10 +35,19 @@
             type: loki
             url: "http://127.0.0.1:3100"
             basicAuth: false
+            jsonData:
+              httpHeaderName1: 'Connection'
+              httpHeaderName2: 'upgrade'
+            secureJsonData:
+              httpHeaderValue1: 'Upgrade'
+              httpHeaderValue2: 'websocket'
         grafana_dashboards:
           - dashboard_id: 1860    #Node Exporter Full Dashboard
             revision_id: 21
             datasource: Prometheus
+        grafana_plugins: [
+          grafana-piechart-panel
+        ]
     - role: diogenxs.loki
       loki_bins: ['loki']
 
