@@ -1,4 +1,21 @@
 ---
+- name: inventory name to hostname
+  become: yes
+  hostname:
+    name: "{{ inventory_name }}"
+
+- name: Update /etc/hosts
+  become: true
+  blockinfile:
+      path: /etc/hosts
+      create: yes
+      block: |
+        127.0.0.1 localhost
+        127.0.0.1 {{ inventory_name }}
+        {% for host in groups['all'] %}
+        {{ hostvars[host]['ansible_host']}} {{ hostvars[host]['inventory_name'] }}    
+        {% endfor %}
+
 - name: 'Update and upgrade apt packages'
   become: yes
   apt:

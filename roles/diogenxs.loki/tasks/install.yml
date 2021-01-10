@@ -1,0 +1,85 @@
+---
+- name: create {{ loki_group }} system group
+  group:
+    name: "{{ loki_group }}"
+    system: true
+    state: present
+
+- name: create {{ loki_user }} system user
+  user:
+    name: "{{ loki_user }}"
+    system: true
+    shell: "/usr/sbin/nologin"
+    group: "{{ loki_group }}"
+    createhome: false
+    home: "{{ loki_storage_dir }}"
+
+- name: create loki data directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: loki
+    group: loki
+    mode: 0755
+  with_items:
+    - "{{ loki_storage_dir }}"
+    - "{{ loki_storage_dir }}/index"
+    - "{{ loki_storage_dir }}/chunks"
+  when: ('loki' in loki_bins)
+
+- name: create loki configuration directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: "{{ loki_group }}"
+    mode: 0770
+  with_items:
+    - "{{ loki_config_dir }}"
+
+- block:
+    - name: download binaries to local folder
+      become: false
+      get_url:
+        url: "https://github.com/grafana/loki/releases/download/v{{ loki_version }}/{{ item }}-linux-{{ go_arch }}.zip"
+        dest: "/tmp/{{ item }}-{{ loki_version }}-linux-{{ go_arch }}.zip"
+        checksum: "sha256:{{ __loki_bins_checksum[item] }}"
+      register: _download_archive
+      until: _download_archive is succeeded
+      retries: 5
+      delay: 2
+      loop: "{{ loki_bins }}"
+      delegate_to: localhost
+      check_mode: false
+
+    - name: unpack binaries
+      become: false
+      unarchive:
+        src: "/tmp/{{ item }}-{{ loki_version }}-linux-{{ go_arch }}.zip"
+        dest: "/tmp"
+        creates: "/tmp/{{ item }}-{{ loki_version }}-linux-{{ go_arch }}"
+      loop: "{{ loki_bins }}"
+      delegate_to: localhost
+      check_mode: false
+
+    - name: propagate official binaries
+      copy:
+        src: "/tmp/{{ item }}-linux-{{ go_arch }}"
+        dest: "/usr/local/bin/{{ item }}"
+        mode: 0755
+        owner: root
+        group: root
+      loop: "{{ loki_bins }}"
+      notify:
+        - restart loki
+
+- name: create systemd service unit
+  template:
+    src: "{{ item }}.service.j2"
+    dest: "/etc/systemd/system/{{ item }}.service"
+    owner: root
+    group: root
+    mode: 0644
+  notify: "restart {{ item }}"
+  loop: "{{ loki_bins }}"
+  when: item == 'loki' or item == 'promtail'

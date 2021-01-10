@@ -1,0 +1,19 @@
+{{ ansible_managed | comment }}
+
+[Unit]
+Description=Promtail
+After=network-online.target
+
+[Service]
+Type=simple
+Environment="GOMAXPROCS={{ ansible_processor_vcpus|default(ansible_processor_count) }}"
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStart=/usr/local/bin/promtail \
+  -config.file {{ loki_config_dir }}/promtail.yml
+
+LimitNOFILE=65000
+SyslogIdentifier=promtail
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

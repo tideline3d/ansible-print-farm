@@ -1,0 +1,21 @@
+{{ ansible_managed | comment }}
+
+[Unit]
+Description=Loki
+After=network-online.target
+
+[Service]
+Type=simple
+Environment="GOMAXPROCS={{ ansible_processor_vcpus|default(ansible_processor_count) }}"
+User={{ loki_user }}
+Group={{ loki_group }}
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStart=/usr/local/bin/loki \
+  -config.file {{ loki_config_dir }}/loki.yml
+
+LimitNOFILE=65000
+SyslogIdentifier=loki
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

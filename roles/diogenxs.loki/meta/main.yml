@@ -1,0 +1,25 @@
+galaxy_info:
+  author: Diogenes Pelisson
+  description: Deploy and configure Loki and Promtail.
+  company: none
+  issue_tracker_url: https://github.com/diogenxs/ansible-role-loki/issues
+  license: WTFPL
+  min_ansible_version: 2.9
+  platforms:
+    - name: Ubuntu
+      versions:
+        - bionic
+        - xenial
+    - name: Debian
+      versions:
+        - stretch
+        - buster
+  galaxy_tags:
+    - loki
+    - promtail
+    - logging
+    - collector
+    - monitoring
+    - grafana
+    - prometheus
+dependencies: []

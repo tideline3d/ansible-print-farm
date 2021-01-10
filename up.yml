@@ -1,9 +1,46 @@
-## Common Setups for all hosts
+
+## Configure RPi specific items
+- hosts: raspberry_pi
+  roles:
+    - role: rpi_boot_config  # This will reboot the RPi if changes are made and wait for it to come back up
+      become: yes
+      vars:
+        boot_config_lines:
+        - "dtparam=poe_fan_temp0=65000,poe_fan_temp0_hyst=5000"  # Set PoE Hat Fan to come on at 65C instead of 45C
+        - "dtparam=poe_fan_temp1=67000,poe_fan_temp1_hyst=2000"  # Speed up fan after 67C
+        - "dtparam=poe_fan_temp2=69000,poe_fan_temp2_hyst=5000"
+        - "dtparam=poe_fan_temp3=71000,poe_fan_temp3_hyst=2000"
+
+## Common items for all systems
 - hosts: all
   roles:
-   - node_exporter
    - common
-   - rpi_exporter   
+   - node_exporter
+
+## Deploy the monitoring server configuration
+- hosts: monitoring_server
+  roles:
+    - role: monitoring_server
+    - role: cloudalchemy.grafana
+      vars:
+        grafana_security:
+          admin_user: admin
+          admin_password: admin
+        grafana_datasources:
+          - name: Prometheus
+            type: prometheus
+            url: "http://127.0.0.1:9090"
+            basicAuth: false
+          - name: Loki
+            type: loki
+            url: "http://127.0.0.1:3100"
+            basicAuth: false
+        grafana_dashboards:
+          - dashboard_id: 1860    #Node Exporter Full Dashboard
+            revision_id: 21
+            datasource: Prometheus
+    - role: diogenxs.loki
+      loki_bins: ['loki']
 
 ## Log all hosts syslog to Loki
 - hosts: all
@@ -12,8 +49,11 @@
     - role: patrickjahns.promtail
       vars: 
         promtail_config_include_default_file_sd_config: False
+        promtail_config_server:
+          http_listen_port: 9080
+          grpc_listen_port: 9081
         promtail_config_clients:
-          - url: "http://192.168.42.242:3100/loki/api/v1/push"
+          - url: "http://{{ hostvars['tpi1'].ansible_host }}:3100/loki/api/v1/push"
             external_labels:
               host: "{{ ansible_hostname }}"
         promtail_config_positions:
@@ -47,24 +87,6 @@
   roles: 
    - semuadmin.octoprint
    - octoprint_plugins
-
-- hosts: monitoring_server
-  roles:
-    - role: monitoring_server
-    - role: cloudalchemy.grafana
-      vars:
-        grafana_security:
-          admin_user: admin
-          admin_password: admin
-        grafana_datasources:
-          - name: prometheus
-            type: prometheus
-            url: "http://{{ hostvars[inventory_hostname]['ansible_facts']['eth0']['ipv4']['address'] }}:9090"
-            basicAuth: false
-        grafana_dashboards:
-          - dashboard_id: 1860    #Node Exporter Full Dashboard
-            revision_id: 21
-            datasource: prometheus
 
 - hosts: octofarm_server
   tasks:
